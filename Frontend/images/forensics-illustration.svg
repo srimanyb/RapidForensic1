@@ -1,0 +1,86 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1929;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#1e3a5f;stop-opacity:0.3" />
+    </linearGradient>
+    
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle patterns -->
+  <circle cx="100" cy="100" r="60" fill="url(#bgGradient)" opacity="0.3"/>
+  <circle cx="320" cy="280" r="80" fill="url(#bgGradient)" opacity="0.2"/>
+  
+  <!-- Laptop/Computer Screen -->
+  <rect x="80" y="180" width="240" height="160" rx="8" fill="#132f4c" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="90" y="190" width="220" height="120" rx="4" fill="#0a1929"/>
+  
+  <!-- Binary code on screen -->
+  <text x="110" y="215" fill="#3b82f6" font-family="monospace" font-size="14" opacity="0.7">0101 1010</text>
+  <text x="110" y="235" fill="#60a5fa" font-family="monospace" font-size="14" opacity="0.7">1100 0011</text>
+  <text x="110" y="255" fill="#3b82f6" font-family="monospace" font-size="14" opacity="0.7">0110 1001</text>
+  <text x="110" y="275" fill="#60a5fa" font-family="monospace" font-size="14" opacity="0.7">1010 0101</text>
+  
+  <!-- Magnifying Glass -->
+  <g filter="url(#glow)">
+    <!-- Glass circle -->
+    <circle cx="280" cy="140" r="70" fill="none" stroke="url(#blueGradient)" stroke-width="8" opacity="0.8"/>
+    <circle cx="280" cy="140" r="65" fill="rgba(59, 130, 246, 0.1)"/>
+    
+    <!-- Binary code inside magnifying glass -->
+    <text x="250" y="135" fill="#60a5fa" font-family="monospace" font-size="20" font-weight="bold">01</text>
+    <text x="250" y="155" fill="#3b82f6" font-family="monospace" font-size="20" font-weight="bold">10</text>
+    
+    <!-- Handle -->
+    <line x1="325" y1="185" x2="360" y2="220" stroke="url(#blueGradient)" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Lock icon (security) -->
+  <g transform="translate(50, 80)">
+    <rect x="10" y="25" width="40" height="35" rx="4" fill="#132f4c" stroke="#3b82f6" stroke-width="2.5"/>
+    <path d="M 18 25 L 18 15 Q 18 5 30 5 Q 42 5 42 15 L 42 25" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="30" cy="42" r="4" fill="#60a5fa"/>
+    <line x1="30" y1="46" x2="30" y2="52" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Checkmark icon (verification) -->
+  <g transform="translate(300, 50)">
+    <circle cx="30" cy="30" r="25" fill="#132f4c" stroke="#10b981" stroke-width="2.5"/>
+    <path d="M 20 30 L 27 37 L 42 22" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Circuit board pattern elements -->
+  <g opacity="0.3">
+    <circle cx="120" cy="320" r="3" fill="#3b82f6"/>
+    <circle cx="180" cy="340" r="3" fill="#60a5fa"/>
+    <circle cx="240" cy="330" r="3" fill="#3b82f6"/>
+    <line x1="120" y1="320" x2="180" y2="340" stroke="#3b82f6" stroke-width="1.5"/>
+    <line x1="180" y1="340" x2="240" y2="330" stroke="#60a5fa" stroke-width="1.5"/>
+  </g>
+  
+  <!-- Hexagonal network pattern -->
+  <g opacity="0.2" stroke="#3b82f6" stroke-width="1.5" fill="none">
+    <polygon points="30,360 40,355 50,360 50,370 40,375 30,370"/>
+    <polygon points="350,30 360,25 370,30 370,40 360,45 350,40"/>
+    <line x1="40" y1="355" x2="360" y2="25"/>
+  </g>
+  
+  <!-- Data shield icon -->
+  <g transform="translate(140, 40)" opacity="0.6">
+    <path d="M 15 0 L 30 0 L 30 15 Q 30 30 15 35 Q 0 30 0 15 L 0 0 Z" fill="#132f4c" stroke="#60a5fa" stroke-width="2"/>
+    <path d="M 10 15 L 14 19 L 22 11" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

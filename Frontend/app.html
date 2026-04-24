@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RapidForensics — Workspace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/animated-state-icons.css">
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- ═══ SIDEBAR ═══ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z" stroke="white"
+                            stroke-width="1.8" stroke-linejoin="round" fill="rgba(255,255,255,0.12)" />
+                        <polyline points="9 12 11 14 15 10" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <span class="sidebar-logo-text">Rapid<span class="accent">Forensics</span></span>
+            </div>
+
+            <!-- Main nav -->
+            <div class="nav-section">Main</div>
+            <div class="nav-item active" data-page="dashboard">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                </svg>
+                Dashboard
+            </div>
+            <div class="nav-item" data-page="investigation">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                Investigation
+            </div>
+            <div class="nav-item" data-page="analytics">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10" />
+                    <line x1="12" y1="20" x2="12" y2="4" />
+                    <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+                Analytics
+            </div>
+            <div class="nav-item" data-page="settings">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                Settings
+            </div>
+
+            <!-- Tools nav -->
+            <div class="nav-section">Forensic Tools</div>
+            <div class="nav-item" data-page="hash-generator">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
+                    <line x1="9" y1="12" x2="15" y2="12" opacity="0.4" />
+                </svg>
+                Hash Generator
+            </div>
+            <div class="nav-item" data-page="metadata-extractor">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <polyline points="10 9 9 9 8 9" />
+                </svg>
+                Metadata Extractor
+            </div>
+            <div class="nav-item" data-page="chain-of-custody">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                Chain of Custody
+            </div>
+            <div class="nav-item" data-page="ai-report">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                AI Report
+                <span class="nav-badge">AI</span>
+            </div>
+
+            <!-- Footer -->
+            <div class="sidebar-footer">
+                <div class="theme-toggle-pill">
+                    <span class="theme-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5" />
+                            <line x1="12" y1="1" x2="12" y2="3" />
+                            <line x1="12" y1="21" x2="12" y2="23" />
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                            <line x1="1" y1="12" x2="3" y2="12" />
+                            <line x1="21" y1="12" x2="23" y2="12" />
+                        </svg>
+                        Light Mode
+                    </span>
+                    <div class="theme-switch" id="themeSwitch" role="switch" aria-checked="false" tabindex="0"></div>
+                </div>
+                <div class="sidebar-user">
+                    <div class="user-avatar" id="userAvatarInitial">?</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebarUsername">Investigator</div>
+                        <div class="user-role">Forensic Analyst</div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()" title="Logout">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ═══ MAIN ═══ -->
+        <div class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <nav class="breadcrumb">
+                        <span class="breadcrumb-item">RapidForensics</span>
+                        <span class="breadcrumb-sep">›</span>
+                        <span class="breadcrumb-item active" id="topbarPageName">Dashboard</span>
+                    </nav>
+                </div>
+                <div class="topbar-right">
+                    <div class="system-status">
+                        <span class="system-dot"></span>
+                        System Operational
+                    </div>
+                    <div id="active-case-pill"
+                        style="display:none;padding:0.22rem 0.75rem;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.22);border-radius:100px;font-size:0.71rem;font-weight:600;color:var(--blue-400);">
+                    </div>
+                    <button class="topbar-icon-btn" onclick="openInvestigationMode()" title="AI Assistant">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-area">
+
+                <!-- ══ DASHBOARD ══ -->
+                <div class="app-page active" id="page-dashboard">
+                    <div class="page-header-row">
+                        <div class="page-header">
+                            <h1 class="page-title">Security Dashboard</h1>
+                            <p class="page-subtitle">Overview of all forensic investigations</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="navigateTo('investigation')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            New Investigation
+                        </button>
+                    </div>
+
+                    <div class="grid-4" style="margin-bottom:1.5rem;">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-label">Total Cases</span>
+                                <div class="stat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path
+                                            d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                                    </svg></div>
+                            </div>
+                            <div class="stat-value" id="stat-total-cases">0</div>
+                            <div class="stat-delta">Investigations opened</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-label">Evidence Files</span>
+                                <div class="stat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="17 8 12 3 7 8" />
+                                        <line x1="12" y1="3" x2="12" y2="15" />
+                                    </svg></div>
+                            </div>
+                            <div class="stat-value" id="stat-evidence">0</div>
+                            <div class="stat-delta">Files uploaded &amp; hashed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-label">Reports</span>
+                                <div class="stat-icon-wrap success"><svg viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                    </svg></div>
+                            </div>
+                            <div class="stat-value" id="stat-reports">0</div>
+                            <div class="stat-delta">AI reports generated</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-label">Integrity</span>
+                                <div class="stat-icon-wrap success"><svg viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg></div>
+                            </div>
+                            <div class="stat-value" id="stat-integrity">100%</div>
+                            <div class="stat-delta">Hash verification rate</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-bottom:1.5rem;">
+                        <div class="card-header">
+                            <span class="card-title">Recent Investigations</span>
+                            <button class="btn btn-primary btn-sm" onclick="navigateTo('investigation')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>New
+                            </button>
+                        </div>
+                        <div class="card-body" id="recent-investigations">
+                            <div class="empty-state">
+                                <div class="empty-state-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8" />
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                    </svg></div>
+                                <div class="empty-state-title">No investigations yet</div>
+                                <div class="empty-state-sub">Click "New Investigation" to create your first case.</div>
+                                <button class="btn btn-primary btn-sm" onclick="navigateTo('investigation')">Start
+                                    Investigation</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><span class="card-title">Case Activity (Last 7 Days)</span></div>
+                        <div class="card-body chart-wrap"><canvas id="dashboard-chart" height="140"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- ══ INVESTIGATION ══ -->
+                <div class="app-page" id="page-investigation">
+                    <div class="page-header-row">
+                        <div class="page-header">
+                            <h1 class="page-title">Investigation</h1>
+                            <p class="page-subtitle">Create and manage forensic cases, upload evidence</p>
+                        </div>
+                    </div>
+
+                    <!-- Step indicator -->
+                    <div
+                        style="display:flex;gap:0;margin-bottom:1.75rem;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;">
+                        <div class="inv-step active" id="inv-step-1"
+                            style="flex:1;padding:0.75rem 1.1rem;display:flex;align-items:center;gap:0.55rem;font-size:0.82rem;font-weight:600;color:var(--blue-400);background:rgba(59,130,246,0.07);border-right:1px solid var(--border);cursor:pointer;"
+                            onclick="showInvStep(1)">
+                            <span
+                                style="width:20px;height:20px;border-radius:50%;background:var(--blue-600);color:white;display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;">1</span>Case
+                            Details
+                        </div>
+                        <div class="inv-step" id="inv-step-2"
+                            style="flex:1;padding:0.75rem 1.1rem;display:flex;align-items:center;gap:0.55rem;font-size:0.82rem;font-weight:600;color:var(--txt-3);border-right:1px solid var(--border);cursor:pointer;"
+                            onclick="showInvStep(2)">
+                            <span
+                                style="width:20px;height:20px;border-radius:50%;background:var(--surface);border:1px solid var(--border-md);color:var(--txt-3);display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;">2</span>Upload
+                            Evidence
+                        </div>
+                        <div class="inv-step" id="inv-step-3"
+                            style="flex:1;padding:0.75rem 1.1rem;display:flex;align-items:center;gap:0.55rem;font-size:0.82rem;font-weight:600;color:var(--txt-3);cursor:pointer;"
+                            onclick="showInvStep(3)">
+                            <span
+                                style="width:20px;height:20px;border-radius:50%;background:var(--surface);border:1px solid var(--border-md);color:var(--txt-3);display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;">3</span>Evidence
+                            Viewer
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Case form -->
+                    <div id="inv-panel-1">
+                        <div class="grid-2">
+                            <div class="card">
+                                <div class="card-header"><span class="card-title">Create New Case</span></div>
+                                <div class="card-body">
+                                    <form id="createCaseForm">
+                                        <div class="form-group">
+                                            <label class="form-label">Case Name *</label>
+                                            <input type="text" class="form-control" id="caseName"
+                                                placeholder="e.g. Malware Incident Feb-2026" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Incident Type</label>
+                                            <select class="form-control" id="caseType">
+                                                <option value="malware">Malware Analysis</option>
+                                                <option value="phishing">Phishing Investigation</option>
+                                                <option value="data-breach">Data Breach</option>
+                                                <option value="insider-threat">Insider Threat</option>
+                                                <option value="network-intrusion">Network Intrusion</option>
+                                                <option value="ransomware">Ransomware Response</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Priority</label>
+                                            <select class="form-control" id="casePriority">
+                                                <option value="critical">🔴 Critical</option>
+                                                <option value="high">🟠 High</option>
+                                                <option value="medium" selected>🟡 Medium</option>
+                                                <option value="low">🟢 Low</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Investigator Name</label>
+                                            <input type="text" class="form-control" id="caseInvestigator"
+                                                placeholder="Your name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" id="caseDescription" rows="3"
+                                                placeholder="Brief description of the incident..."></textarea>
+                                        </div>
+                                        <div id="case-form-msg" style="display:none;margin-bottom:0.75rem;"></div>
+                                        <div style="display:flex;gap:0.6rem;">
+                                            <button type="submit" class="btn btn-primary">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path
+                                                        d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                                                </svg>
+                                                Create Case &amp; Continue
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header"><span class="card-title">Active Cases</span></div>
+                                <div id="cases-list-panel" class="card-body">
+                                    <div class="empty-state">
+                                        <div class="empty-state-sub">No cases yet. Create one to get started.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Upload -->
+                    <div id="inv-panel-2" style="display:none;">
+                        <div class="card" style="margin-bottom:1rem;">
+                            <div class="card-header">
+                                <span class="card-title">Active Case</span>
+                                <div id="active-case-badge"
+                                    style="font-size:0.78rem;color:var(--blue-400);font-weight:600;">—</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="drop-zone" id="dropZone">
+                                    <div class="drop-zone-icon"><svg viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="17 8 12 3 7 8" />
+                                            <line x1="12" y1="3" x2="12" y2="15" />
+                                        </svg></div>
+                                    <div class="drop-zone-title">Drop evidence files here</div>
+                                    <div class="drop-zone-sub">or <label for="fileInput"
+                                            style="color:var(--blue-400);cursor:pointer;text-decoration:underline;">browse
+                                            files</label></div>
+                                    <div class="drop-zone-sub" style="margin-top:0.3rem;font-size:0.74rem;">SHA-256
+                                        computed automatically · All file types accepted</div>
+                                    <input type="file" id="fileInput" multiple style="display:none;">
+                                </div>
+                                <div id="upload-progress" style="margin-top:1rem;"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Evidence Files</span>
+                                <div style="display:flex;gap:0.5rem;align-items:center;">
+                                    <span id="evidence-count-badge" class="chip default">0 files</span>
+                                    <button class="btn btn-ghost btn-sm" onclick="showInvStep(3)">View in Viewer
+                                        →</button>
+                                </div>
+                            </div>
+                            <div class="table-wrap">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Filename</th>
+                                            <th>Size</th>
+                                            <th>SHA-256 Hash</th>
+                                            <th>Risk</th>
+                                            <th>Category</th>
+                                            <th>Uploaded</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="evidence-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Viewer + AI Report (side by side) -->
+                    <div id="inv-panel-3" style="display:none;">
+
+                        <!-- Top action bar -->
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+                            <div style="font-size:0.82rem;color:var(--txt-3);">
+                                <span id="step3-case-label" style="color:var(--blue-400);font-weight:600;">No case
+                                    selected</span>
+                            </div>
+                            <div style="display:flex;gap:0.5rem;">
+                                <button class="btn btn-ghost btn-sm" onclick="showInvStep(2)">← Back to Upload</button>
+                                <button class="btn btn-primary btn-sm" onclick="generateReportInline()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                    </svg>
+                                    Generate AI Report
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Side by side -->
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem;">
+
+                            <!-- LEFT: Evidence Viewer -->
+                            <div>
+                                <div class="card" style="margin-bottom:0.75rem;">
+                                    <div class="card-header">
+                                        <span class="card-title">Evidence Files</span>
+                                        <span id="step3-ev-count" class="chip default">0 files</span>
+                                    </div>
+                                    <div id="evidence-viewer-content" style="max-height:280px;overflow-y:auto;">
+                                        <div class="empty-state" style="padding:1.5rem;">
+                                            <div class="empty-state-sub">Upload evidence in Step 2, then click a file to
+                                                inspect.</div>
+                                            <button class="btn btn-primary btn-sm" onclick="showInvStep(2)">← Upload
+                                                Evidence</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Evidence detail panel -->
+                                <div id="ev-detail-area" class="card" style="display:none;">
+                                    <div class="card-header">
+                                        <span class="card-title" id="ev-detail-name">Evidence Detail</span>
+                                        <span id="ev-detail-risk" class="chip default"></span>
+                                    </div>
+                                    <div class="table-wrap" id="ev-detail-table"
+                                        style="max-height:240px;overflow-y:auto;"></div>
+                                </div>
+                            </div>
+
+                            <!-- RIGHT: AI Report Config & Preview -->
+                            <div>
+                                <div class="card" style="margin-bottom:0.75rem;">
+                                    <div class="card-header">
+                                        <span class="card-title">AI Report Configuration</span>
+                                        <span class="nav-badge">AI</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label class="form-label">Report Type</label>
+                                            <select class="form-control" id="inline-report-type">
+                                                <option value="full">Full Investigation Report</option>
+                                                <option value="executive">Executive Summary</option>
+                                                <option value="technical">Technical Analysis</option>
+                                                <option value="court">Court-Ready Document</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">OpenAI API Key <span
+                                                    style="color:var(--txt-3);font-weight:400;">(optional)</span></label>
+                                            <input type="password" class="form-control" id="inline-api-key"
+                                                placeholder="sk-... or leave blank for template">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Additional Notes</label>
+                                            <textarea class="form-control" id="inline-report-notes" rows="2"
+                                                placeholder="Extra context for the AI..."></textarea>
+                                        </div>
+                                        <button class="btn btn-primary" id="inline-gen-btn"
+                                            onclick="generateReportInline()" style="width:100%;">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path
+                                                    d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                            </svg>
+                                            Generate Report
+                                        </button>
+                                        <div id="inline-gen-status"
+                                            style="margin-top:0.6rem;font-size:0.78rem;color:var(--txt-3);text-align:center;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Next steps checklist -->
+                                <div class="card">
+                                    <div class="card-header"><span class="card-title">Next Steps</span></div>
+                                    <div class="card-body" style="padding:0.75rem 1rem;">
+                                        <div class="next-step-item done" id="nxt-case"><span
+                                                class="nxt-icon">✅</span><span>Case created</span></div>
+                                        <div class="next-step-item done" id="nxt-upload"><span
+                                                class="nxt-icon">✅</span><span>Evidence uploaded &amp; hashed</span>
+                                        </div>
+                                        <div class="next-step-item done" id="nxt-view"><span
+                                                class="nxt-icon">✅</span><span>Evidence reviewed</span></div>
+                                        <div class="next-step-item pending" id="nxt-report"><span
+                                                class="nxt-icon">⏳</span><span>Generate AI forensic report</span></div>
+                                        <div class="next-step-item pending" id="nxt-coc"><span
+                                                class="nxt-icon">⏳</span><span>Review chain of custody</span></div>
+                                        <div class="next-step-item pending" id="nxt-download"><span
+                                                class="nxt-icon">⏳</span><span>Download &amp; archive report</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- WHITE PAPER REPORT (shown after generation) -->
+                        <div id="report-paper-wrapper" style="display:none;">
+                            <div
+                                style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;">
+                                <h3 style="font-size:1rem;font-weight:700;color:var(--txt-1);margin:0;">Generated Report
+                                </h3>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn btn-ghost btn-sm" onclick="copyInlineReport()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                        </svg>
+                                        Copy
+                                    </button>
+                                    <button class="btn btn-ghost btn-sm" onclick="downloadReportTXT()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="7 10 12 15 17 10" />
+                                            <line x1="12" y1="15" x2="12" y2="3" />
+                                        </svg>
+                                        Download .txt
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" onclick="printReport()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="6 9 6 2 18 2 18 9" />
+                                            <path
+                                                d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                                            <rect x="6" y="14" width="12" height="8" />
+                                        </svg>
+                                        Print / Save PDF
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- The actual white paper -->
+                            <div class="report-paper" id="report-paper">
+                                <!-- Populated by generateReportInline() -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ══ ANALYTICS ══ -->
+                <div class="app-page" id="page-analytics">
+                    <div class="page-header">
+                        <h1 class="page-title">Case Timeline &amp; Analytics</h1>
+                        <p class="page-subtitle">Visualize case activity and insights</p>
+                    </div>
+                    <div class="grid-2" style="margin-bottom:1.5rem;">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Case Timeline</span></div>
+                            <div class="card-body">
+                                <div class="timeline" id="timeline-container">
+                                    <div class="empty-state">
+                                        <div class="empty-state-sub">No events yet. Start an investigation.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Evidence by Category</span></div>
+                            <div class="card-body chart-wrap"><canvas id="category-chart" height="200"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="card-title">Risk Distribution</span></div>
+                        <div class="card-body chart-wrap"><canvas id="risk-chart" height="120"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- ══ SETTINGS ══ -->
+                <div class="app-page" id="page-settings">
+                    <div class="page-header">
+                        <h1 class="page-title">Settings</h1>
+                        <p class="page-subtitle">Configure your forensic workspace</p>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">AI Configuration</div>
+                        <div class="settings-card">
+                            <div class="settings-row">
+                                <div>
+                                    <div class="settings-row-label">OpenAI API Key</div>
+                                    <div class="settings-row-desc">For AI report generation and evidence analysis</div>
+                                </div>
+                                <div class="settings-row-control" style="display:flex;gap:0.5rem;">
+                                    <input type="password" class="form-control" id="settings-apikey"
+                                        placeholder="sk-..." style="width:220px;">
+                                    <button class="btn btn-primary btn-sm" onclick="saveApiKey()">Save</button>
+                                </div>
+                            </div>
+                            <div class="settings-row">
+                                <div>
+                                    <div class="settings-row-label">AI Model</div>
+                                </div>
+                                <div class="settings-row-control">
+                                    <select class="form-control" id="settings-model" style="width:180px;">
+                                        <option>gpt-4</option>
+                                        <option>gpt-4-turbo</option>
+                                        <option>gpt-3.5-turbo</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">Interface</div>
+                        <div class="settings-card">
+                            <div class="settings-row">
+                                <div>
+                                    <div class="settings-row-label">Dark Mode</div>
+                                    <div class="settings-row-desc">Toggle between dark and light theme</div>
+                                </div>
+                                <div class="settings-row-control"><button class="toggle-switch"
+                                        id="settings-theme-toggle" onclick="toggleTheme()"></button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">Data Management</div>
+                        <div class="settings-card">
+                            <div class="settings-row">
+                                <div>
+                                    <div class="settings-row-label">Export All Data</div>
+                                    <div class="settings-row-desc">Download cases, evidence &amp; reports as JSON</div>
+                                </div>
+                                <div class="settings-row-control"><button class="btn btn-ghost btn-sm"
+                                        onclick="exportAllData()">Export JSON</button></div>
+                            </div>
+                            <div class="settings-row">
+                                <div>
+                                    <div class="settings-row-label">Clear All Data</div>
+                                    <div class="settings-row-desc">Permanently delete all stored data</div>
+                                </div>
+                                <div class="settings-row-control"><button class="btn btn-danger btn-sm"
+                                        onclick="clearAllData()">Clear Data</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ HASH GENERATOR ══ -->
+                <div class="app-page" id="page-hash-generator">
+                    <div class="page-header">
+                        <h1 class="page-title">Hash Generator</h1>
+                        <p class="page-subtitle">Generate and verify SHA-256 cryptographic hashes</p>
+                    </div>
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">File Hash</span></div>
+                            <div class="card-body">
+                                <div class="drop-zone" id="hashDropZone" style="padding:2rem;">
+                                    <div class="drop-zone-icon"><svg viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <polyline points="16 18 22 12 16 6" />
+                                            <polyline points="8 6 2 12 8 18" />
+                                        </svg></div>
+                                    <div class="drop-zone-title">Drop a file to hash</div>
+                                    <div class="drop-zone-sub">or <label for="hashFileInput"
+                                            style="color:var(--blue-400);cursor:pointer;text-decoration:underline;">browse</label>
+                                    </div>
+                                    <input type="file" id="hashFileInput" style="display:none;"
+                                        onchange="hashFile(this.files[0])">
+                                </div>
+                                <div id="hash-result-area" style="margin-top:1rem;"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Text Hash</span></div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="form-label">Input Text</label>
+                                    <textarea class="form-control" id="hashTextInput" rows="5"
+                                        placeholder="Enter text to hash..."></textarea>
+                                </div>
+                                <button class="btn btn-primary" onclick="hashText()" style="margin-bottom:1rem;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="16 18 22 12 16 6" />
+                                        <polyline points="8 6 2 12 8 18" />
+                                    </svg>
+                                    Generate Hash
+                                </button>
+                                <div id="text-hash-result"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-top:1rem;">
+                        <div class="card-header"><span class="card-title">Hash Verification — Compare Two Hashes</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label class="form-label">Original Hash</label>
+                                    <input type="text" class="form-control" id="hash-verify-a"
+                                        placeholder="SHA-256 hash A"
+                                        style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Comparison Hash</label>
+                                    <input type="text" class="form-control" id="hash-verify-b"
+                                        placeholder="SHA-256 hash B"
+                                        style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="verifyHashes()">Verify Match</button>
+                            <div id="hash-verify-result" style="margin-top:1rem;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ METADATA EXTRACTOR ══ -->
+                <div class="app-page" id="page-metadata-extractor">
+                    <div class="page-header">
+                        <h1 class="page-title">Metadata Extractor</h1>
+                        <p class="page-subtitle">Extract forensic metadata from uploaded files</p>
+                    </div>
+                    <div class="card" style="margin-bottom:1rem;">
+                        <div class="card-header"><span class="card-title">Upload File for Metadata Extraction</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="drop-zone" id="metaDropZone" style="padding:2rem;">
+                                <div class="drop-zone-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                    </svg></div>
+                                <div class="drop-zone-title">Drop any file to extract metadata</div>
+                                <div class="drop-zone-sub">or <label for="metaFileInput"
+                                        style="color:var(--blue-400);cursor:pointer;text-decoration:underline;">browse</label>
+                                </div>
+                                <input type="file" id="metaFileInput" style="display:none;"
+                                    onchange="extractMetadata(this.files[0])">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="metadata-result-card" style="display:none;" class="card">
+                        <div class="card-header">
+                            <span class="card-title" id="meta-filename">File Metadata</span>
+                            <button class="btn btn-ghost btn-sm" onclick="copyMetadata()">Copy</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Property</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="metadata-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ CHAIN OF CUSTODY ══ -->
+                <div class="app-page" id="page-chain-of-custody">
+                    <div class="page-header-row">
+                        <div class="page-header">
+                            <h1 class="page-title">Chain of Custody</h1>
+                            <p class="page-subtitle">Immutable forensic activity log</p>
+                        </div>
+                        <div style="display:flex;gap:0.5rem;">
+                            <button class="btn btn-ghost btn-sm" onclick="verifyChainIntegrity()">Verify
+                                Integrity</button>
+                            <button class="btn btn-ghost btn-sm" onclick="exportChainOfCustody('csv')">Export
+                                CSV</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-4" style="margin-bottom:1.5rem;">
+                        <div class="stat-card">
+                            <div class="stat-card-header"><span class="stat-card-label">Total Entries</span>
+                                <div class="stat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                                    </svg></div>
+                            </div>
+                            <div class="stat-value" id="coc-entry-count">0</div>
+                            <div class="stat-delta">Immutable log entries</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header"><span class="stat-card-label">Integrity</span>
+                                <div class="stat-icon-wrap success"><svg viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg></div>
+                            </div>
+                            <div class="stat-value" id="coc-integrity">✓</div>
+                            <div class="stat-delta">Chain verified</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header"><span class="stat-card-label">Investigator</span>
+                                <div class="stat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg></div>
+                            </div>
+                            <div class="stat-value" style="font-size:1.1rem;" id="coc-investigator">—</div>
+                            <div class="stat-delta">Primary analyst</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header"><span class="stat-card-label">Last Activity</span>
+                                <div class="stat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg></div>
+                            </div>
+                            <div class="stat-value" style="font-size:0.9rem;" id="coc-last-time">—</div>
+                            <div class="stat-delta">Most recent action</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><span class="card-title">Activity Log</span><span id="coc-count-badge"
+                                class="chip default">0 entries</span></div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>User</th>
+                                        <th>Action</th>
+                                        <th>Details</th>
+                                        <th>Entry Hash</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="coc-tbody">
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="empty-state" style="padding:1.5rem;">
+                                                <div class="empty-state-sub">No activity logged yet. Start an
+                                                    investigation to begin recording.</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ AI REPORT ══ -->
+                <div class="app-page" id="page-ai-report">
+                    <div class="page-header">
+                        <h1 class="page-title">AI Report Generator</h1>
+                        <p class="page-subtitle">Generate court-ready forensic reports powered by AI</p>
+                    </div>
+
+                    <div class="card" style="margin-bottom:1.5rem;">
+                        <div class="card-header">
+                            <span class="card-title">AI Evidence Analysis</span>
+                            <span class="chip default">LLaMA 2</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid-2">
+                                <div>
+                                    <div class="form-group">
+                                        <label class="form-label">Upload Evidence File</label>
+                                        <input type="file" class="form-control" id="aiEvidenceFileInput"
+                                            accept=".txt,.log,.csv,.json,.png,.jpg,.jpeg,.webp,.gif">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">File Type</label>
+                                        <select class="form-control" id="aiFileType">
+                                            <option value="text">text</option>
+                                            <option value="log">log</option>
+                                            <option value="image">image</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-primary" id="runAiAnalysisBtn" onclick="runAiAnalysis()">
+                                        Run AI Analysis
+                                    </button>
+                                    <div id="ai-analysis-status" style="margin-top:0.75rem;"></div>
+                                </div>
+                                <div id="ai-analysis-panel" style="display:none;">
+                                    <div class="card" style="border:1px solid var(--border);">
+                                        <div class="card-body">
+                                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+                                                <h3 style="margin:0;font-size:0.95rem;">Analysis Result</h3>
+                                                <span id="ai-risk-chip" class="chip default">Low</span>
+                                            </div>
+                                            <p style="margin:0 0 0.4rem 0;font-size:0.78rem;color:var(--txt-3);text-transform:uppercase;letter-spacing:0.05em;">Summary</p>
+                                            <p id="ai-summary" style="margin:0 0 0.8rem 0;font-size:0.84rem;color:var(--txt-2);"></p>
+                                            <p style="margin:0 0 0.4rem 0;font-size:0.78rem;color:var(--txt-3);text-transform:uppercase;letter-spacing:0.05em;">Anomalies</p>
+                                            <ul id="ai-anomalies" style="margin:0 0 0.8rem 1rem;padding:0;font-size:0.82rem;color:var(--txt-2);"></ul>
+                                            <p style="margin:0 0 0.4rem 0;font-size:0.78rem;color:var(--txt-3);text-transform:uppercase;letter-spacing:0.05em;">Forensic Report</p>
+                                            <div id="ai-forensic-report"
+                                                style="white-space:pre-wrap;font-size:0.82rem;color:var(--txt-2);max-height:220px;overflow:auto;border:1px solid var(--border);padding:0.65rem;border-radius:8px;background:var(--surface);">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="margin-bottom:1.5rem;">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Report Configuration</span></div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="form-label">Select Case</label>
+                                    <select class="form-control" id="report-case-select">
+                                        <option value="">— Select a case —</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Report Type</label>
+                                    <select class="form-control" id="reportType">
+                                        <option value="full">Full Investigation Report</option>
+                                        <option value="executive">Executive Summary</option>
+                                        <option value="technical">Technical Analysis</option>
+                                        <option value="court">Court-Ready Document</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">AI API Key (OpenAI)</label>
+                                    <input type="password" class="form-control" id="apiKeyInput"
+                                        placeholder="sk-...  (or leave blank for template)">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Additional Context</label>
+                                    <textarea class="form-control" id="reportNotes" rows="3"
+                                        placeholder="Any extra context for the AI..."></textarea>
+                                </div>
+                                <button class="btn btn-primary" id="generateReportBtn" onclick="generateReport()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                    </svg>
+                                    Generate Report
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Past Reports</span>
+                                <span id="reports-count" class="chip default">0</span>
+                            </div>
+                            <div id="reports-list" class="card-body">
+                                <div class="empty-state">
+                                    <div class="empty-state-sub">No reports yet. Generate your first report.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="report-output-card" style="display:none;" class="card">
+                        <div class="card-header">
+                            <span class="card-title">Generated Report</span>
+                            <div style="display:flex;gap:0.5rem;">
+                                <button class="btn btn-ghost btn-sm" onclick="copyReport()">Copy</button>
+                                <button class="btn btn-ghost btn-sm" onclick="downloadReport()">Download .txt</button>
+                                <button class="btn btn-primary btn-sm" onclick="saveReport()">Save to Records</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <textarea id="reportEditorContent" class="form-control" rows="22"
+                                style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /content-area -->
+        </div><!-- /main-content -->
+    </div><!-- /app-layout -->
+
+    <!-- Hash Monitor Widget -->
+    <div id="hash-monitor" class="collapsed">
+        <div class="monitor-header" onclick="toggleMonitor()">
+            <div class="monitor-header-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                <span class="monitor-title">Integrity Monitor</span>
+            </div>
+            <button class="monitor-toggle">+</button>
+        </div>
+        <div class="monitor-body">
+            <div id="monitor-items">
+                <div style="font-size:0.76rem;color:var(--txt-3);">No files tracked yet.</div>
+            </div>
+            <div style="padding:0.5rem 0 0;border-top:1px solid var(--border);margin-top:0.5rem;">
+                <button class="btn btn-ghost btn-sm" onclick="reverifyAll()"
+                    style="font-size:0.72rem;width:100%;">Re-verify All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Panel -->
+    <div id="investigation-panel">
+        <div class="panel-header">
+            <span class="ai-badge">AI</span>
+            <span class="panel-title">Investigation Assistant</span>
+            <button class="panel-close-btn" onclick="closeInvestigationMode()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="ai-message">
+                <p>Hello Investigator. Ask me about your evidence, request analysis summaries, or ask forensic
+                    questions.</p>
+            </div>
+        </div>
+        <div class="chat-input-wrap">
+            <input type="text" id="chat-input" placeholder="Ask about the evidence..."
+                onkeypress="if(event.key==='Enter')sendChatMessage()">
+            <button class="btn btn-primary btn-sm" onclick="sendChatMessage()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <button class="ai-fab" onclick="openInvestigationMode()" title="AI Assistant">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+    </button>
+
+    <script src="js/app.js"></script>
+    <script src="js/features/hash-monitor.js"></script>
+    <script src="js/features/chain-of-custody.js"></script>
+    <script src="js/features/ai-summarizer.js"></script>
+    <script src="js/animated-state-icons.js"></script>
+    <script src="js/workflow.js"></script>
+</body>
+
+</html>
