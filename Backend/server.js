@@ -15,11 +15,9 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const mongoose = require('mongoose'); // [AI] Used for the Report Mongoose schema
 const aiRoutes = require('./routes/aiRoutes');
+const hashRoutes = require('./routes/hashRoutes');
 
 const app = express();
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log("MongoDB error:", err));
 const PORT = process.env.PORT || 5000;
 
 // // 🔥 ADD THIS
@@ -156,6 +154,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/ai', aiRoutes);
+app.use('/api/hash', hashRoutes);
 
 // ─── Serve Frontend Static Files ──────────────────────────────────────────────
 // Serve all HTML/CSS/JS from the Frontend folder.
@@ -468,8 +467,16 @@ app.use((err, _req, res, _next) => {
 });
 
 // ─── Start ────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`\n  RapidForensics Backend`);
     console.log(`  ➜  Local: http://localhost:${PORT}/`);
     console.log(`  ➜  Health check: http://localhost:${PORT}/api/health\n`);
+});
+
+// Keep one referenced timer so the process does not auto-exit in constrained runtimes.
+const keepAliveTimer = setInterval(() => {}, 60_000);
+
+server.on('close', () => {
+    clearInterval(keepAliveTimer);
+    console.warn('[SERVER] HTTP server closed.');
 });

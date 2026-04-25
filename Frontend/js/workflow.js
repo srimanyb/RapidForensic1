@@ -710,7 +710,21 @@ async function hashFile(file) {
     if (!file) return;
     const area = document.getElementById('hash-result-area');
     if (area) area.innerHTML = `<div class="chip default">⚙️ Computing SHA-256 for ${file.name}...</div>`;
-    const hash = await computeSHA256(file);
+    let hash = '';
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch(`${API_BASE}/api/hash/sha256`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
+            body: formData,
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Hash API error');
+        hash = data.sha256;
+    } catch (_err) {
+        hash = await computeSHA256(file);
+    }
     AppState.logActivity('HASH_GENERATED', null, `Hashed file: ${file.name} → ${hash.substr(0, 16)}...`);
     if (area) area.innerHTML = `
         <div class="card" style="border:1px solid rgba(59,130,246,0.25);">
@@ -836,6 +850,8 @@ function detectAiFileType(file) {
     const ext = (file?.name || '').split('.').pop().toLowerCase();
     if ((file?.type || '').startsWith('image/') || ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext)) return 'image';
     if (ext === 'log') return 'log';
+    if (ext === 'json') return 'json';
+    if (ext === 'eml' || ext === 'msg') return 'email';
     return 'text';
 }
 
@@ -854,6 +870,15 @@ function setAiStatus(message, type = 'default') {
     if (!el) return;
     const chipClass = type === 'error' ? 'danger' : type === 'success' ? 'success' : 'default';
     el.innerHTML = `<span class="chip ${chipClass}" style="font-size:0.76rem;">${message}</span>`;
+}
+
+function escapeHtml(value) {
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 }
 
 async function runAiAnalysis() {
@@ -913,36 +938,44 @@ window.runAiAnalysis = runAiAnalysis;
 
 function renderAiAnalysisResult(data) {
     const panel = document.getElementById('ai-analysis-panel');
-    const summary = document.getElementById('ai-summary');
-    const anomalies = document.getElementById('ai-anomalies');
-    const report = document.getElementById('ai-forensic-report');
+    const modelChip = document.getElementById('ai-model-chip');
+    const threatType = document.getElementById('ai-threat-type');
+    const indicators = document.getElementById('ai-indicators');
+    const explanation = document.getElementById('ai-explanation');
     const riskChip = document.getElementById('ai-risk-chip');
 
-    if (!panel || !summary || !anomalies || !report || !riskChip) return;
+    if (!panel || !threatType || !indicators || !explanation || !riskChip) return;
 
-    const riskLevel = ['Low', 'Medium', 'High'].includes(data.riskLevel) ? data.riskLevel : 'Low';
+    const riskLevel = ['Low', 'Medium', 'High'].includes(data.severity) ? data.severity : 'Low';
     const riskClass = riskLevel === 'High' ? 'danger' : riskLevel === 'Medium' ? 'warning' : 'success';
     riskChip.className = `chip ${riskClass}`;
     riskChip.textContent = riskLevel;
 
-    summary.textContent = data.summary || 'No summary generated.';
-    const anomalyList = Array.isArray(data.anomalies) ? data.anomalies : [];
-    anomalies.innerHTML = anomalyList.length
-        ? anomalyList.map(item => `<li>${item}</li>`).join('')
-        : '<li>No clear anomalies identified.</li>';
-    report.textContent = data.forensicReport || 'No forensic report generated.';
+    if (modelChip) modelChip.textContent = data.model || 'unknown model';
+    threatType.textContent = data.threatType || 'Unknown';
+
+    const ind = data.indicators || {};
+    const keywords = Array.isArray(ind.keywords_detected) ? ind.keywords_detected : [];
+    const suspiciousIps = Array.isArray(ind.suspicious_ips) ? ind.suspicious_ips : [];
+    indicators.innerHTML = `
+        <li>Failed logins: ${Number(ind.failed_logins || 0)}</li>
+        <li>Suspicious IPs: ${suspiciousIps.length ? suspiciousIps.map(escapeHtml).join(', ') : 'None'}</li>
+        <li>Keywords: ${keywords.length ? keywords.map(escapeHtml).join(', ') : 'None'}</li>
+        <li>Unusual time window (2AM-5AM): ${ind.unusual_time ? 'Yes' : 'No'}</li>
+    `;
+    explanation.textContent = data.report || 'No forensic report generated.';
     panel.style.display = '';
 
     // Pre-fill report context so users can generate a fuller report with one click.
     const notes = document.getElementById('reportNotes');
     if (notes) {
         notes.value = [
-            `AI Summary: ${data.summary || ''}`,
-            `Risk Level: ${riskLevel}`,
-            `Anomalies: ${anomalyList.length ? anomalyList.join('; ') : 'None'}`,
+            `Threat Type: ${data.threatType || ''}`,
+            `Severity: ${riskLevel}`,
+            `Indicators: ${JSON.stringify(ind, null, 2)}`,
             '',
-            'AI Forensic Report:',
-            data.forensicReport || '',
+            'Forensic Explanation:',
+            data.report || '',
         ].join('\n').trim();
     }
 }
@@ -1000,7 +1033,6 @@ async function generateReport() {
     if (!caseObj) { alert('Case not found.'); return; }
 
     const ev = AppState.evidence.filter(e => e.caseId === caseId);
-    const apiKey = document.getElementById('apiKeyInput')?.value.trim() || localStorage.getItem('rf_apikey') || '';
     const notes = document.getElementById('reportNotes')?.value.trim() || '';
     const rType = document.getElementById('reportType')?.value || 'full';
 
@@ -1008,26 +1040,7 @@ async function generateReport() {
 
     let content = '';
 
-    if (apiKey && apiKey.startsWith('sk-')) {
-        // Real OpenAI call
-        try {
-            const prompt = buildPrompt(caseObj, ev, rType, notes);
-            const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-                body: JSON.stringify({ model: document.getElementById('settings-model')?.value || 'gpt-4', messages: [{ role: 'user', content: prompt }], max_tokens: 1800 })
-            });
-            if (!resp.ok) throw new Error(`API error ${resp.status}`);
-            const data = await resp.json();
-            content = data.choices[0].message.content;
-        } catch (err) {
-            alert('AI API error: ' + err.message + '\n\nFalling back to template report.');
-            content = buildTemplateReport(caseObj, ev, rType, notes);
-        }
-    } else {
-        // Template report
-        content = buildTemplateReport(caseObj, ev, rType, notes);
-    }
+    content = buildTemplateReport(caseObj, ev, rType, notes);
 
     const report = {
         id: 'RPT-' + Date.now(),
@@ -1159,7 +1172,6 @@ async function generateReportInline() {
     const btn = document.getElementById('inline-gen-btn');
     const statusEl = document.getElementById('inline-gen-status');
     const rType = document.getElementById('inline-report-type')?.value || 'full';
-    const apiKey = document.getElementById('inline-api-key')?.value.trim() || localStorage.getItem('rf_apikey') || '';
     const notes = document.getElementById('inline-report-notes')?.value.trim() || '';
 
     const caseObj = AppState.currentCase;
@@ -1174,28 +1186,7 @@ async function generateReportInline() {
     const ev = AppState.evidence.filter(e => e.caseId === caseObj.id);
     let content = '';
 
-    if (apiKey && apiKey.startsWith('sk-')) {
-        try {
-            const prompt = buildPrompt(caseObj, ev, rType, notes);
-            const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-                body: JSON.stringify({
-                    model: document.getElementById('settings-model')?.value || 'gpt-4',
-                    messages: [{ role: 'user', content: prompt }],
-                    max_tokens: 1800
-                })
-            });
-            if (!resp.ok) throw new Error(`API error ${resp.status}`);
-            const data = await resp.json();
-            content = data.choices[0].message.content;
-        } catch (err) {
-            console.warn('[AI Report]', err.message);
-            content = buildTemplateReport(caseObj, ev, rType, notes);
-        }
-    } else {
-        content = buildTemplateReport(caseObj, ev, rType, notes);
-    }
+    content = buildTemplateReport(caseObj, ev, rType, notes);
 
     // Save to AppState
     const report = {

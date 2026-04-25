@@ -4,7 +4,7 @@
 // This file provides additional AI query processing
 
 async function processAIQuery(query, evidence) {
-    // In production, this would call actual AI API (Gemini/OpenAI)
+    // In production, this can call the backend forensic AI endpoint.
     // For demo, return mock intelligent responses
 
     const lowerQuery = query.toLowerCase();

@@ -1,74 +1,45 @@
-const axios = require('axios');
+const axios = require("axios");
 
-const HF_API_BASE = 'https://api-inference.huggingface.co/models';
+const HF_API_BASE = "https://api-inference.huggingface.co/models";
+const DEFAULT_MODEL = "mistralai/Mistral-7B-Instruct-v0.2";
+const FALLBACK_MODELS = [
+    "google/flan-t5-large",
+    "tiiuae/falcon-7b-instruct",
+];
 
-function getRiskLevel(anomalies, summary, reportText) {
-    const text = `${summary} ${reportText} ${(anomalies || []).join(' ')}`.toLowerCase();
-    const highSignals = ['malware', 'data exfiltration', 'privilege escalation', 'ransomware', 'command and control'];
-    const mediumSignals = ['failed login', 'suspicious', 'anomaly', 'unauthorized', 'unusual'];
-
-    if (highSignals.some(s => text.includes(s)) || (anomalies || []).length >= 5) return 'High';
-    if (mediumSignals.some(s => text.includes(s)) || (anomalies || []).length >= 2) return 'Medium';
-    return 'Low';
+function buildStructuredPrompt(indicators, severity) {
+    return [
+        "You are a forensic analyst. Analyze the following structured evidence:",
+        JSON.stringify(indicators, null, 2),
+        "",
+        "Generate a report with:",
+        "- Threat Type",
+        "- Severity",
+        "- Key Indicators",
+        "- Explanation",
+        "- Recommended Actions",
+        "",
+        `Rule-based severity computed by backend: ${severity}`,
+    ].join("\n");
 }
 
-function safeParsedResponse(rawText) {
-    const fallback = {
-        summary: 'AI analysis completed with limited confidence.',
-        anomalies: [],
-        riskLevel: 'Low',
-        forensicReport: 'Unable to extract a fully structured report from model output.',
-    };
-
-    if (!rawText || typeof rawText !== 'string') return fallback;
-
-    const firstBrace = rawText.indexOf('{');
-    const lastBrace = rawText.lastIndexOf('}');
-    if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) return fallback;
-
-    try {
-        const parsed = JSON.parse(rawText.slice(firstBrace, lastBrace + 1));
-        const anomalies = Array.isArray(parsed.anomalies)
-            ? parsed.anomalies.map(v => String(v)).filter(Boolean)
-            : [];
-        const summary = String(parsed.summary || '').trim();
-        const forensicReport = String(parsed.forensicReport || '').trim();
-        const computedRisk = getRiskLevel(anomalies, summary, forensicReport);
-        const riskLevel = ['Low', 'Medium', 'High'].includes(parsed.riskLevel) ? parsed.riskLevel : computedRisk;
-
-        return {
-            summary: summary || fallback.summary,
-            anomalies,
-            riskLevel,
-            forensicReport: forensicReport || fallback.forensicReport,
-        };
-    } catch {
-        return fallback;
-    }
+function extractGeneratedText(payload) {
+    if (Array.isArray(payload) && payload[0]?.generated_text) return String(payload[0].generated_text);
+    if (typeof payload?.generated_text === "string") return payload.generated_text;
+    if (typeof payload === "string") return payload;
+    return "";
 }
 
-async function analyzeForensicEvidence(processedContent, fileType) {
-    const apiKey = process.env.HUGGINGFACE_API_KEY;
-    const model = process.env.HF_MODEL || 'meta-llama/Llama-2-7b-chat-hf';
+function inferThreatType(indicators) {
+    const keywords = indicators.keywords_detected || [];
+    if (keywords.includes("phishing")) return "Phishing";
+    if (keywords.includes("malware") || keywords.includes("ransomware")) return "Malware Activity";
+    if ((indicators.failed_logins || 0) > 3) return "Brute-force / Credential Abuse";
+    if ((indicators.suspicious_ips || []).length > 0) return "Suspicious Network Access";
+    return "No clear threat";
+}
 
-    if (!apiKey) {
-        throw new Error('HUGGINGFACE_API_KEY is not configured.');
-    }
-
-    const prompt = [
-        'You are a professional digital forensic investigator analyzing evidence for anomalies, threats, and suspicious behavior.',
-        'Analyze the provided evidence and return JSON only with this exact schema:',
-        '{"summary":"","anomalies":[],"riskLevel":"Low | Medium | High","forensicReport":""}',
-        'Rules:',
-        '- anomalies must be an array of concise strings.',
-        '- riskLevel must be exactly one of: Low, Medium, High.',
-        '- forensicReport must be structured and actionable.',
-        '- Do not include markdown. Do not include any text outside JSON.',
-        `fileType: ${fileType}`,
-        'evidence:',
-        processedContent,
-    ].join('\n');
-
+async function callHuggingFace({ model, apiKey, prompt }) {
     const response = await axios.post(
         `${HF_API_BASE}/${model}`,
         {
@@ -76,31 +47,61 @@ async function analyzeForensicEvidence(processedContent, fileType) {
             options: { wait_for_model: true },
             parameters: {
                 max_new_tokens: 700,
-                temperature: 0.2,
+                temperature: 0.15,
                 return_full_text: false,
             },
         },
         {
             headers: {
                 Authorization: `Bearer ${apiKey}`,
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
             timeout: 90000,
         }
     );
+    return extractGeneratedText(response.data);
+}
 
-    const payload = response.data;
-    let rawText = '';
+async function analyzeForensicEvidence({ indicators, severity }) {
+    const apiKey = process.env.HUGGINGFACE_API_KEY;
+    if (!apiKey) throw new Error("HUGGINGFACE_API_KEY is not configured.");
 
-    if (Array.isArray(payload) && payload[0]?.generated_text) {
-        rawText = payload[0].generated_text;
-    } else if (typeof payload?.generated_text === 'string') {
-        rawText = payload.generated_text;
-    } else if (typeof payload === 'string') {
-        rawText = payload;
+    const requestedModel = process.env.HF_MODEL || DEFAULT_MODEL;
+    const prompt = buildStructuredPrompt(indicators, severity);
+
+    const modelsToTry = [requestedModel, ...FALLBACK_MODELS.filter((m) => m !== requestedModel)];
+    for (const model of modelsToTry) {
+        try {
+            const report = await callHuggingFace({ model, apiKey, prompt });
+            return {
+                report: report || "No detailed model output was returned.",
+                threatType: inferThreatType(indicators),
+                severity,
+                indicators,
+                model,
+            };
+        } catch (_err) {
+            // Try next candidate model.
+        }
     }
 
-    return safeParsedResponse(rawText);
+    const keywords = (indicators.keywords_detected || []).join(", ") || "none";
+    const suspiciousIps = (indicators.suspicious_ips || []).join(", ") || "none";
+    const fallbackReport = [
+        `Threat Type: ${inferThreatType(indicators)}`,
+        `Severity: ${severity}`,
+        `Key Indicators: failed_logins=${indicators.failed_logins || 0}, suspicious_ips=${suspiciousIps}, keywords=${keywords}, unusual_time=${indicators.unusual_time ? "yes" : "no"}`,
+        "Explanation: Rule-based forensic triage identified these indicators from the submitted evidence using deterministic parsing and scoring.",
+        "Recommended Actions: Investigate suspicious IPs, review authentication logs, isolate impacted systems, and preserve chain-of-custody evidence for legal review.",
+    ].join("\n");
+
+    return {
+        report: fallbackReport,
+        threatType: inferThreatType(indicators),
+        severity,
+        indicators,
+        model: "rule-based-fallback",
+    };
 }
 
 module.exports = {
