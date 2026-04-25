@@ -42,6 +42,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async function 
     clearError();
 
     try {
+        console.log('[Auth] Attempting login to:', `${API_BASE}/api/auth/login`);
         const res = await fetch(`${API_BASE}/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -72,8 +73,9 @@ document.getElementById('loginForm')?.addEventListener('submit', async function 
         window.location.href = 'app.html';
 
     } catch (err) {
-        showError('Cannot reach the server. Make sure the backend is running on port 5000.');
-        console.error('[Login error]', err);
+        const errorMsg = `Connection failed: ${err.message}. Target: ${API_BASE}`;
+        showError(errorMsg);
+        console.error('[Login error detail]', err);
         setLoading(false);
     }
 });

@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setLoading(true);
 
         try {
+            console.log('[Auth] Attempting registration to:', `${API_BASE}/api/auth/register`);
             const res = await fetch(`${API_BASE}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -79,8 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => { window.location.href = 'app.html'; }, 1800);
 
         } catch (err) {
-            showError('Cannot reach the server. Is the backend running on port 5000?');
-            console.error('[Signup error]', err);
+            const errorMsg = `Connection failed: ${err.message}. Target: ${API_BASE}`;
+            showError(errorMsg);
+            console.error('[Signup error detail]', err);
             setLoading(false);
         }
     });
