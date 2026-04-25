@@ -118,12 +118,24 @@ async function createReport({ content, summary, riskScore }) {
  *   $env:MONGO_URI = "mongodb://localhost:27017/rapidforensics"
  */
 const MONGO_URI = process.env.MONGO_URI || '';
+
+// DEBUG: Log the MONGO_URI to verify it's loaded (masking the password for safety)
+if (MONGO_URI) {
+    const maskedURI = MONGO_URI.replace(/\/\/.*:.*@/, '//****:****@');
+    console.log(`  ➜  MONGO_URI found: ${maskedURI}`);
+} else {
+    console.warn('  ⚠  MONGO_URI not set — Mongoose will not connect to MongoDB.');
+}
+
 if (MONGO_URI) {
     mongoose.connect(MONGO_URI)
-        .then(() => console.log('  ➜  MongoDB connected:', MONGO_URI))
-        .catch(err => console.warn('  ⚠  MongoDB connection failed (continuing without it):', err.message));
+        .then(() => console.log('  ➜  MongoDB connected successfully to Atlas'))
+        .catch(err => {
+            console.error('  ✖  MongoDB connection error:', err.message);
+            console.error('     Check your MONGO_URI and IP whitelist in MongoDB Atlas.');
+        });
 } else {
-    console.log('  ℹ  MONGO_URI not set — Mongoose Report schema defined but not persisting to MongoDB.');
+    console.log('  ℹ  Falling back to local JSON storage for reports.');
 }
 
 /**
