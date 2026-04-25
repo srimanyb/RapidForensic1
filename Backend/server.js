@@ -52,9 +52,13 @@ const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const CASES_FILE = path.join(DATA_DIR, 'cases.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 
-// Ensure required directories exist on startup
+// Ensure required directories exist on startup (handle Vercel read-only filesystem)
 [DATA_DIR, UPLOADS_DIR].forEach(dir => {
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    try {
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    } catch (err) {
+        console.warn(`  ⚠  Could not create directory ${dir}: ${err.message}`);
+    }
 });
 
 // Seed empty data stores if not present
@@ -139,6 +143,17 @@ const reportSchema = new mongoose.Schema({
 
 // Model — use existing compiled model if hot-reloaded (avoids OverwriteModelError)
 const Report = mongoose.models.Report || mongoose.model('Report', reportSchema);
+
+/**
+ * User — Mongoose Schema
+ */
+const userSchema = new mongoose.Schema({
+    username:     { type: String, required: true, unique: true },
+    email:        { type: String },
+    passwordHash: { type: String, required: true },
+    createdAt:    { type: Date, default: Date.now },
+});
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 // ──────────────────────────────────────────────────────────────────────────────
 
 // In-memory session tokens  {token -> {username, expiresAt}}
@@ -258,8 +273,27 @@ app.post('/api/auth/register', async (req, res) => {
         if (!username || !password) {
             return res.status(400).json({ success: false, message: 'Username and password are required.' });
         }
+
+        const normalizedUser = username.trim().toLowerCase();
+
+        // 1. Check MongoDB first if connected
+        if (mongoose.connection.readyState === 1) {
+            const existing = await User.findOne({ username: new RegExp(`^${normalizedUser}$`, 'i') });
+            if (existing) return res.status(409).json({ success: false, message: 'Username already exists.' });
+
+            const newUser = new User({
+                username: username.trim(),
+                email: email.trim(),
+                passwordHash: hashPassword(password),
+            });
+            await newUser.save();
+            const token = createSession(newUser.username);
+            return res.status(201).json({ success: true, token, user: { id: newUser._id, username: newUser.username, email: newUser.email } });
+        }
+
+        // 2. Fallback to Local JSON (will fail on Vercel)
         const users = await readUsers();
-        if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
+        if (users.find(u => u.username.toLowerCase() === normalizedUser)) {
             return res.status(409).json({ success: false, message: 'Username already exists.' });
         }
         const user = {
@@ -288,9 +322,24 @@ app.post('/api/auth/login', async (req, res) => {
         if (!username || !password) {
             return res.status(400).json({ success: false, message: 'Username and password are required.' });
         }
+
+        const normalizedUser = username.trim().toLowerCase();
+        const pwdHash = hashPassword(password);
+
+        // 1. Check MongoDB first if connected
+        if (mongoose.connection.readyState === 1) {
+            const user = await User.findOne({ username: new RegExp(`^${normalizedUser}$`, 'i') });
+            if (!user || user.passwordHash !== pwdHash) {
+                return res.status(401).json({ success: false, message: 'Invalid username or password.' });
+            }
+            const token = createSession(user.username);
+            return res.json({ success: true, token, user: { id: user._id, username: user.username, email: user.email } });
+        }
+
+        // 2. Fallback to Local JSON
         const users = await readUsers();
-        const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
-        if (!user || user.passwordHash !== hashPassword(password)) {
+        const user = users.find(u => u.username.toLowerCase() === normalizedUser);
+        if (!user || user.passwordHash !== pwdHash) {
             return res.status(401).json({ success: false, message: 'Invalid username or password.' });
         }
         const token = createSession(user.username);
@@ -480,3 +529,6 @@ server.on('close', () => {
     clearInterval(keepAliveTimer);
     console.warn('[SERVER] HTTP server closed.');
 });
+
+// Export the app for Vercel serverless environment
+module.exports = app;

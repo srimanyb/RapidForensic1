@@ -3,7 +3,11 @@
    RapidForensics v2 — Backend-connected
    ===================================================================== */
 
-const API_BASE = 'http://localhost:5000';
+// Dynamic API Base: use localhost for dev, or current origin for production (Vercel)
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:5000'
+    : window.location.origin;
+
 
 // ─── Page init ────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
