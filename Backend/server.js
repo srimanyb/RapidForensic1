@@ -62,8 +62,12 @@ const USERS_FILE = path.join(DATA_DIR, 'users.json');
 });
 
 // Seed empty data stores if not present
-if (!fs.existsSync(CASES_FILE)) fs.writeFileSync(CASES_FILE, JSON.stringify([], null, 2));
-if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, JSON.stringify([], null, 2));
+try {
+    if (!fs.existsSync(CASES_FILE)) fs.writeFileSync(CASES_FILE, JSON.stringify([], null, 2));
+    if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, JSON.stringify([], null, 2));
+} catch (err) {
+    console.warn(`  ⚠  Could not seed local databases: ${err.message}`);
+}
 
 // ─── [AI] Report Schema & Store ───────────────────────────────────────────────
 /**
@@ -78,7 +82,11 @@ if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, JSON.stringify([], 
  *   createdAt (Date)    — ISO timestamp, defaults to now
  */
 const REPORTS_FILE = path.join(DATA_DIR, 'reports.json');
-if (!fs.existsSync(REPORTS_FILE)) fs.writeFileSync(REPORTS_FILE, JSON.stringify([], null, 2));
+try {
+    if (!fs.existsSync(REPORTS_FILE)) fs.writeFileSync(REPORTS_FILE, JSON.stringify([], null, 2));
+} catch (err) {
+    console.warn(`  ⚠  Could not seed local reports database: ${err.message}`);
+}
 
 async function readReports() {
     const raw = await fsp.readFile(REPORTS_FILE, 'utf8');
