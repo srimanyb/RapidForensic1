@@ -536,19 +536,21 @@ app.use((err, _req, res, _next) => {
 });
 
 // ─── Start ────────────────────────────────────────────────────────────────────
-const server = app.listen(PORT, () => {
-    console.log(`\n  RapidForensics Backend`);
-    console.log(`  ➜  Local: http://localhost:${PORT}/`);
-    console.log(`  ➜  Health check: http://localhost:${PORT}/api/health\n`);
-});
+if (require.main === module) {
+    const server = app.listen(PORT, () => {
+        console.log(`\n  RapidForensics Backend`);
+        console.log(`  ➜  Local: http://localhost:${PORT}/`);
+        console.log(`  ➜  Health check: http://localhost:${PORT}/api/health\n`);
+    });
 
-// Keep one referenced timer so the process does not auto-exit in constrained runtimes.
-const keepAliveTimer = setInterval(() => {}, 60_000);
+    // Keep one referenced timer so the process does not auto-exit in constrained runtimes.
+    const keepAliveTimer = setInterval(() => {}, 60_000);
 
-server.on('close', () => {
-    clearInterval(keepAliveTimer);
-    console.warn('[SERVER] HTTP server closed.');
-});
+    server.on('close', () => {
+        clearInterval(keepAliveTimer);
+        console.warn('[SERVER] HTTP server closed.');
+    });
+}
 
 // Export the app for Vercel serverless environment
 module.exports = app;
