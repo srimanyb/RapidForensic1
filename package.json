@@ -1,0 +1,12 @@
+{
+  "name": "rapidforensics-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "Backend",
+    "Frontend"
+  ],
+  "scripts": {
+    "build": "echo 'Building...'"
+  }
+}
