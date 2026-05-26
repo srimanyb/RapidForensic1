@@ -3,10 +3,10 @@
    RapidForensics v2 — Backend-connected (POST /api/auth/register)
    ===================================================================== */
 
-// Dynamic API Base: use localhost for dev, or current origin for production (Vercel)
+// Dynamic API Base: use localhost for dev, or relative path for production (Vercel)
 const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:5000'
-    : window.location.origin;
+    : '/api';
 
 
 document.addEventListener('DOMContentLoaded', function () {

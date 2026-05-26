@@ -15,13 +15,12 @@ const API_BASE = (() => {
         const stored = localStorage.getItem('rf_api_base');
         if (stored) return stored;
     }
-    // Use current domain if on HTTPS (deployed), otherwise localhost for dev
-    if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
-        // For Vercel: assume backend is at same domain
-        return window.location.origin;
+    // Use localhost for dev, or relative /api path for production (Vercel)
+    if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+        return 'http://localhost:5000';
     }
-    // Default to localhost for development
-    return 'http://localhost:5000';
+    // For production: use relative path to same domain
+    return '/api';
 })();
 
 /* ─── Helpers ─────────────────────────────────────────────────────────────── */
